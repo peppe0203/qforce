@@ -16,6 +16,7 @@
 
 package nl.qnh.qforce.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import nl.qnh.qforce.domain.Person;
 
 import java.util.List;
@@ -42,6 +43,6 @@ public interface PersonService {
      * @param id the id of the person
      * @return the person
      */
-    Optional<Person> get(long id);
+    Optional<Person> get(long id) throws JsonProcessingException;
 }
 
