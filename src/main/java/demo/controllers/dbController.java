@@ -37,4 +37,26 @@ public class dbController {
         }
     }
 
+    // Add persons to the persons database
+    public static void insertPerson(Integer id,String name, String gender, String birthYear, Integer mass ,Integer height) throws SQLException {
+        // try to establish a connection
+        try (Connection connection = getConnection();
+             // create a statement using connection object
+             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO PERSONS" +
+                     "  (ID, NAME, GENDER, BIRTHYEAR, MASS,HEIGHT) VALUES " +
+                     " (?, ?, ?, ?, ?, ?);")) {
+            preparedStatement.setInt(1, id);
+            preparedStatement.setString(2, name);
+            preparedStatement.setString(3, gender);
+            preparedStatement.setString(4, birthYear);
+            preparedStatement.setInt(5, mass);
+            preparedStatement.setInt(6, height);
+
+            // execute the query or update query
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
 }

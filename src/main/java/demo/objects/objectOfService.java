@@ -7,11 +7,14 @@ import nl.qnh.qforce.domain.Movie;
 import nl.qnh.qforce.domain.Person;
 import nl.qnh.qforce.service.PersonService;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
+
+import static demo.controllers.dbController.insertPerson;
 
 public class objectOfService implements PersonService {
     // service for searching a person bij name
@@ -81,6 +84,14 @@ public class objectOfService implements PersonService {
                 // add the movie object to the list of movies
                 listOfMovies.add((nl.qnh.qforce.domain.Movie) Movie);
             });
+
+            // Add the person from the search by id to the database
+            Person person = createPerson(root, Integer.parseInt(String.valueOf(id)), listOfMovies);
+            try {
+                insertPerson((int) id,person.getName(),person.getGender().toString(), person.getBirthYear(), person.getHeight(), person.getWeight());
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
 
             // create a person object and return this object
             return Optional.of(createPerson(root, Integer.parseInt(String.valueOf(id)), listOfMovies));}
