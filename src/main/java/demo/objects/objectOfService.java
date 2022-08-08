@@ -15,6 +15,7 @@ import java.util.stream.IntStream;
 
 public class objectOfService implements PersonService {
     // service for searching a person bij name
+
     @Override
     public List<Person> search(String query) {
         return searchFunc(query);
@@ -81,8 +82,10 @@ public class objectOfService implements PersonService {
                 // add the movie object to the list of movies
                 listOfMovies.add((nl.qnh.qforce.domain.Movie) Movie);
             });
+
             // create a person object and return this object
             return Optional.of(createPerson(root, Integer.parseInt(String.valueOf(id)), listOfMovies));}
+
         // if the request returns null, return an empty Optional object and print an error
         else {
             System.out.println("[!] ERROR occurred - see message above");

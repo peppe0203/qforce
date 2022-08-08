@@ -5,6 +5,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
 
 import java.time.LocalDate;
 
+
 public class objectOfMovie implements Movie {
     // title: getters and setters for the movie title (type String)
     @JsonProperty("title")

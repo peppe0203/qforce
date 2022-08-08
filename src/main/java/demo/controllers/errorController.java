@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
-// When there is an error (fault url) this page wil be shown
+// when there is an error (fault url) this page wil be shown
 @Controller
 public class errorController implements ErrorController{
     @RequestMapping("/error")

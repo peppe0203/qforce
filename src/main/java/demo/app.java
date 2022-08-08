@@ -8,12 +8,16 @@ import demo.controllers.errorController;
 import demo.objects.objectOfService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.sql.SQLException;
+
+import static demo.controllers.dbController.insertRecord;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 /*
@@ -22,6 +26,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 */
 @RestController
 @SpringBootApplication
+@PropertySource("classpath:app.properties")
 public class app {
     private Object jsonObject;
 
@@ -60,11 +65,15 @@ public class app {
     // function used to call searchPersonName and present the output
     // PARAM: q - variable used to define the search name
     @RequestMapping(value = "/Persons", produces = MediaType.TEXT_PLAIN_VALUE)
-    private Object getPersonBySearch(@RequestParam String q) throws JsonProcessingException {
+    private Object getPersonBySearch(@RequestParam String q) throws JsonProcessingException, SQLException {
         // create object from the object service
         objectOfService personServiceBySearch = new objectOfService();
         // if listOfPersons is empty this means there are no result from the API
         if (personServiceBySearch.searchFunc(q).isEmpty() ==  false){
+
+            // add the search url by name to the database
+            insertRecord("https://swapi.dev/api/people?search=" + q);
+
             // get the searchFunc and display this
             // getMapper is the function that's returns the jackson mapper for marshalling and unmarshalling JSON
             // fix the presentation of the api so birthYear and releaseDate are presented in snake-case
@@ -78,12 +87,16 @@ public class app {
     // function used to call getPersonId and present the output
     // PARAM: id - variable used to get specific person
     @RequestMapping(value = "/Persons/{id}", produces = MediaType.TEXT_PLAIN_VALUE)
-    private Object getPersonById(@PathVariable String id) throws JsonProcessingException {
+    private Object getPersonById(@PathVariable String id) throws JsonProcessingException, SQLException {
         objectOfService personServiceById= new objectOfService();
         // check if the response of the service is not null
         if (personServiceById.getFuncId((Long.parseLong(id))).isEmpty() == false ){
+            // add the search with id to the database
+            insertRecord("https://swapi.dev/api/people/" + id);
+
             // get the getFuncId and display this
             // fix the presentation of the api so birthYear and releaseDate are presented in snake-case
+            // try to add the url and date to the database
             return getMapper().writerWithDefaultPrettyPrinter().writeValueAsString(personServiceById.getFuncId(Long.parseLong(id)).get()).replace("birthYear", "birth_year"). replace("releaseDate", "release_date");
         }
         else {
