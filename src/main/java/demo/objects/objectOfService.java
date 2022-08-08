@@ -46,8 +46,7 @@ public class objectOfService implements PersonService {
                 });
                 // create the object of a person with the related movies
                 // add the person to the list of persons
-                objectOfPerson Person = createPerson(root.path("results").get(i), Integer.parseInt(String.valueOf(i)),listOfMovies);
-                listOfPersons.add(Person);
+                listOfPersons.add(createPerson(root.path("results").get(i), Integer.parseInt(String.valueOf(i)),listOfMovies));
             });
             return listOfPersons;
         } catch (JsonProcessingException e) {
